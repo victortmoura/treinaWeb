@@ -10,24 +10,33 @@
 	<div th:replace="fragmentos/fragmentos :: cabecalho"></div>
 	<div class="container">
 		<h3>Listagem de tarefas</h3>
-		<a href="/tarefas/inserir" class="btn btn-success">Inserir nova tarefa</a>
-		<div th:each="tarefa: ${tarefas}" style="margin-top:10px">
+		<a href="/tarefas/inserir" class="btn btn-success">Inserir nova
+			tarefa</a>
+		<div th:each="tarefa: ${tarefas}" style="margin-top: 10px">
 			<div class="card bg-light mb-3">
 				<div class="card-header" th:text="${tarefa.titulo}"></div>
 				<div class="card-body">
-					<p class="card-text" th:text="${tarefa.descricao}"></p>
-					<p class="card-text" th:text="${'Data de Expiração:' + #dates.format(tarefa.dataExpiracao, 'dd/MM/yyyy')}"></p>									
-				</div>
-				<div class="card-footer bg-light">
-					<p>
-						<a th:href="@{/tarefas/alterar/{id}()id=${tarefa.id}}">Alterar</a>
-					</p>
+					<p class="card-text" style="color: green;"
+						th:if="${tarefa.dataExpiracao.after(new java.util.Date())}">Em
+						dia</p>
+					<p class="card-text" style="color: red;"
+						th:if="${tarefa.dataExpiracao.before(new java.util.Date())}">Atrasada</p>
+					<p class="card-text"
+						th:text="${'Data de Expiração:' + #dates.format(tarefa.dataExpiracao, 'dd/MM/yyyy')}"></p>
+
+					<div class="card-footer bg-light">
+						<p>
+							<a th:href="@{/tarefas/alterar/{id}(id=${tarefa.id})}">Alterar</a>
+							| <a th:href="@{/tarefas/excluir/{id}(id=${tarefa.id})}">Excluir</a>
+							| <a th:if="${!tarefa.concluida}" th:href="@{/tarefas/concluir/{id}(id=${tarefa.id})}">Concluir</a>
+						</p>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
-<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
-<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>	
+	<script src="/webjars/jquery/3.4.1/jquery.min.js"></script>
+	<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 </body>
 </html>
